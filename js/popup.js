@@ -1,15 +1,18 @@
 $(function(){
+    //クリック時に呼ばれる
     $("#generate").on("click", function(){
         
-        var d = new Date();
-        var firstday = new Date(d.getFullYear()+"/"+(d.getMonth() + 1) + "/01").getDay();
+        
+        // var d = new Date();
+        // var firstday = new Date(d.getFullYear()+"/"+(d.getMonth() + 1) + "/01").getDay();
 
-        var weekdays = ["日", "月", "火", "木", "金", "土", "日"];
+        // var weekdays = ["日", "月", "火", "木", "金", "土", "日"];
 
-        $("#text").text("曜日:" + weekdays[firstday]);        
+        // $("#text").text("曜日:" + weekdays[firstday]);
+        $("#text").text($("#list15 option:selected").text());
     });
 
-    'use strict';
+    //'use strict';
     var $calendar = $('#calendar');
     var weekTbl = new Array('月','火','水','木','金','土','日');	// 曜日テーブル定義
     var monthTbl= new Array(31,28,31,30,31,30,31,31,30,31,30,31);	// 月テーブル定義
@@ -32,10 +35,11 @@ $(function(){
     });
     
     //プルダウンメニューを作成
-    function getPulldown(table, index)
+    function getPulldown(table, day, myWeek)
     {
-        var txt = '<select name="list">';
+        var txt = '<select id="list' + (day + 1) + '">';
         var nameList = $("#text").val().split(",");
+        var index = day+myWeek;
 
         var selector = new Array();
         if(index%7 == 5 || index%7 == 6)
@@ -70,18 +74,17 @@ $(function(){
     function setCalender(y, m){
         var myDate = new Date(y,m);	// 今日の日付データ取得
         var myYear = myDate.getFullYear();	// 年を取得
-        ((myYear % 4)===0 && (myYear % 100) !==0) || (myYear % 400)===0 ? monthTbl[1] = 29: 28;	// うるう年だったら...
-        // ２月を２９日とする
+        ((myYear % 4)===0 && (myYear % 100) !==0) || (myYear % 400)===0 ? monthTbl[1] = 29: 28;	// うるう年だったら2月を29日とする
         var myMonth = myDate.getMonth();	// 月を取得(0月～11月)
-        myDate.setDate(1);	// 日付を'１日'に変えて、
-        var myWeek = myDate.getDay() - 1;	// '１日'の曜日を取得
-        var myTblLine = Math.ceil((myWeek+monthTbl[myMonth])/7);	// カレンダーの行数
+        myDate.setDate(1);	// 日付を'1日'に変えて、
+        var myWeek = myDate.getDay() == 0 ? 6 : myData.getDay() -1;	// '１日'の曜日を取得(0:月 -> 6:日)
+        var myTblLine = (myWeek < 0 && monthTbl[myMonth] > 29) ? 6 : Math.ceil((myWeek+monthTbl[myMonth])/7);	// カレンダーの行数, 日曜から始まり30日以上ある月のみ6行
         var myTable = new Array(7*myTblLine);	// 表のセル数を用意
         for(var i=0; i<7*myTblLine; i++){
             myTable[i]=' ';	// セルを全て空にする
         }
         for(i=0; i<monthTbl[myMonth]; i++){
-            myTable[i+myWeek]=(i+1) + getPulldown(myTable, i+myWeek);	// 日付を埋め込む
+            myTable[i+myWeek]=(i+1) + getPulldown(myTable, i, myWeek);	// 日付を埋め込む
         }
     
         var source = '';
