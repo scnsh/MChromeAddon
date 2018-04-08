@@ -1,16 +1,4 @@
 $(function(){
-    //クリック時に呼ばれる
-    $("#generate").on("click", function(){
-        
-        
-        // var d = new Date();
-        // var firstday = new Date(d.getFullYear()+"/"+(d.getMonth() + 1) + "/01").getDay();
-
-        // var weekdays = ["日", "月", "火", "木", "金", "土", "日"];
-
-        // $("#text").text("曜日:" + weekdays[firstday]);
-        $("#text").text($("#list15 option:selected").text());
-    });
 
     //'use strict';
     var $calendar = $('#calendar');
@@ -21,24 +9,46 @@ $(function(){
     var todayCurMonth = curDate.getMonth();	// 月を取得(0月～11月)
     var curYear = curDate.getFullYear();	// 年を取得        
 
+    var names = '';  //読み込んだオフィス名の文字列を取得
+    var colors = ''; //読み込んだ色の文字列を取得
+
     //リストは2個以上が必要、0:休日用デフォルト、1:平日用デフォルト
     $.getJSON("js/list.json", function(data){
-        var names = '';            
         for(var i in data)
         {
             names += data[i].name + ',';
+            colors += data[i].color + ',';
         }
-        $("#text").text(names);
 
         // JSONファイルを読み込んでから実行する、今月分のみ表示
         setCalender(curYear, todayCurMonth);        
     });
     
+    //pukiwikiフォーマットの日付を出力する
+    function getDayPrint(id, day)
+    {
+        return "&color(" + colorList[i] + ",white){" + day +"};";
+    }
+
+    //pukiwiki用のフォーマットを出力する
+    function getPukiwiki()
+    {
+        var colorList = colors.split(",");
+        var nameList = names.split(",");
+        var txt = '';
+        for(var i=0; i < nameList.length - 1; i++)
+        {
+            txt += "- &color(" + colorList[i] + ",white){" + colorList[i] + " : " + nameList[i] + "};¥n"   
+        }
+        txt += "|月|火|水|木|金|土|日|¥n";
+        return txt;
+    }
+
     //プルダウンメニューを作成
     function getPulldown(table, day, myWeek)
     {
         var txt = '<select id="list' + (day + 1) + '">';
-        var nameList = $("#text").val().split(",");
+        var nameList = names.split(",");
         var index = day+myWeek;
 
         var selector = new Array();
@@ -127,5 +137,18 @@ $(function(){
         
         $calendar.append(tableSource);	// 表の作成開始
     }
+
+    //クリック時に呼ばれる
+    $("#generate").on("click", function(){
+                
+        // var d = new Date();
+        // var firstday = new Date(d.getFullYear()+"/"+(d.getMonth() + 1) + "/01").getDay();
+
+        // var weekdays = ["日", "月", "火", "木", "金", "土", "日"];
+
+        // $("#text").text("曜日:" + weekdays[firstday]);
+        //$("#text").text($("#list15 option:selected").text());
+        $("#text").text(getPukiwiki());
+    });    
 
   }); 
