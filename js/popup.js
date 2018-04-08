@@ -9,21 +9,22 @@ $(function(){
     var todayCurMonth = curDate.getMonth();	// 月を取得(0月～11月)
     var curYear = curDate.getFullYear();	// 年を取得        
 
-    var ids = '';    //読み込んだオフィス名に対応するidを取得
-    var names = '';  //読み込んだオフィス名の文字列を取得
-    var colors = ''; //読み込んだ色の文字列を取得
+    var ids = [];    //読み込んだオフィス名に対応するidを取得
+    var names = [];  //読み込んだオフィス名の文字列を取得
+    var colors = []; //読み込んだ色の文字列を取得
 
     var myWeek;
     var myTblLine;
-    var pukiwikiTable;
+    var myTable;
 
+    //JSONファイルの読み込み
     //リストは2個以上が必要、0:休日用デフォルト、1:平日用デフォルト
     $.getJSON("js/list.json", function(data){
         for(var i in data)
         {
-            ids += data[i].id + ',';
-            names += data[i].name + ',';
-            colors += data[i].color + ',';
+            ids.push(data[i].id);
+            names.push(data[i].name);
+            colors.push(data[i].color);
         }
 
         // JSONファイルを読み込んでから実行する、今月分のみ表示
@@ -31,42 +32,36 @@ $(function(){
     });
     
     //pukiwikiフォーマットの日付を出力する
-    function getDayPrint(colorList, day)
+    function getDayPrint(day)
     {
-        if(day == '')
-            return '';
-
         var id = $("[id=list" + day +  "]").val();
-        return "&color(" + colorList[id] + ",white){" + day +"};";
+        if(id == null)
+            return '';        
+        return "&color(" + colors[id] + ",white){" + day +"};";
     }
 
     //pukiwiki用のフォーマットを出力する
     function getPukiwiki(tblLine, table)
     {
-        var colorList = colors.split(",");
-        var nameList = names.split(",");
         var txt = '';
-        for(var i=0; i < nameList.length - 1; i++)
+        //オフィスごとの色分け説明文を追加
+        for(var i=0; i < names.length; i++)
         {
-            txt += "- &color(" + colorList[i] + ",white){" + colorList[i] + " : " + nameList[i] + "};\n"   
+            txt += "- &color(" + colors[i] + ",white){" + colors[i] + " : " + names[i] + "};\n"
         }
-        txt += "|月|火|水|木|金|土|日|\n";
+        txt += "\n|月|火|水|木|金|土|日|\n";
 
-        var source = '';
-        var td = '|';
-        var tdC = '|';
-        var tr = '|';
-        var trC = '\n';
-    
+        var dayBegin = '|';
+        var dayEnd = '|';
+        var weekEnd = '\n';    
         for(i=0; i<tblLine; i++){	// 表の「行」のループ
-            source += tr;
+            txt += dayBegin;
             for (var j = 0; j < 7; j++) {
-                var dat = table[j+(i*7)];
-                source += getDayPrint(colorList, dat) + tdC;
+                var dat = myTable[j+(i*7)].split('<');
+                txt += getDayPrint(dat[0]) + dayEnd;
             }
-            source += trC;
+            txt += weekEnd;
         }
-        txt += source;
         return txt;
     }
 
@@ -74,8 +69,6 @@ $(function(){
     function getPulldown(table, day, myWeek)
     {
         var txt = '<select id="list' + (day + 1) + '">';
-        var nameList = names.split(",");
-        var idList = ids.split(",");
         var index = day+myWeek;
 
         var selector = new Array();
@@ -89,18 +82,18 @@ $(function(){
         }
         
         txt += '<option value="' + 
-               idList[0] + '"' + 
+               ids[0] + '"' + 
                selector[0] + '>' + 
-               nameList[0] + '</option>';
+               names[0] + '</option>';
         txt += '<option value="' + 
-               idList[1] + '"' + 
+               ids[1] + '"' + 
                selector[1] + '>' + 
-               nameList[1] + '</option>';
-        for(var i = 2; i < nameList.length; i++)
+               names[1] + '</option>';
+        for(var i = 2; i < names.length; i++)
         {
             txt += '<option value="' + 
-            idList[i] + '">' + 
-            nameList[i] + '</option>';         
+            ids[i] + '">' + 
+            names[i] + '</option>';         
         }
         txt += '</select>';    
 
@@ -109,22 +102,19 @@ $(function(){
 
     // カレンダーを作成
     function setCalender(y, m){
-        var myDate = new Date(y,m);	// 今日の日付データ取得
+        var myDate = new Date(y,m);	// 指定の日付データ取得
         var myYear = myDate.getFullYear();	// 年を取得
         ((myYear % 4)===0 && (myYear % 100) !==0) || (myYear % 400)===0 ? monthTbl[1] = 29: 28;	// うるう年だったら2月を29日とする
         var myMonth = myDate.getMonth();	// 月を取得(0月～11月)
         myDate.setDate(1);	// 日付を'1日'に変えて、
         myWeek = myDate.getDay() == 0 ? 6 : myData.getDay() -1;	// '１日'の曜日を取得(0:月 -> 6:日)
         myTblLine = (myWeek < 0 && monthTbl[myMonth] > 29) ? 6 : Math.ceil((myWeek+monthTbl[myMonth])/7);	// カレンダーの行数, 日曜から始まり30日以上ある月のみ6行
-        var myTable = new Array(7*myTblLine);	// 表のセル数を用意
-        pukiwikiTable = new Array(7*myTblLine);	// 表のセル数を用意        
+        myTable = new Array(7*myTblLine);	// 表のセル数を用意
         for(var i=0; i<7*myTblLine; i++){
             myTable[i]=' ';	// セルを全て空にする
-            pukiwikiTable[i]='';
         }
         for(i=0; i<monthTbl[myMonth]; i++){
             myTable[i+myWeek]=(i+1) + getPulldown(myTable, i, myWeek);	// 日付を埋め込む
-            pukiwikiTable[i+myWeek]=(i+1);
         }
     
         var source = '';
@@ -170,15 +160,8 @@ $(function(){
 
     //クリック時に呼ばれる
     $("#generate").on("click", function(){
-                
-        // var d = new Date();
-        // var firstday = new Date(d.getFullYear()+"/"+(d.getMonth() + 1) + "/01").getDay();
-
-        // var weekdays = ["日", "月", "火", "木", "金", "土", "日"];
-
-        // $("#text").text("曜日:" + weekdays[firstday]);
-        //$("#text").text($("#list15 option:selected").text());
-        $("#text").text(getPukiwiki(myTblLine, pukiwikiTable));
+        //pukiwikiフォーマットを表示
+        $("#text").text(getPukiwiki(myTblLine, myTable));
 
     });    
 
