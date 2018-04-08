@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "CalGenPukiwiki",
-  "description": "This extension generate monthy calendar by pukiwiki format.",
+  "description": "This extension generates working calendar with pukiwiki format.",
   "version": "1.0",
   "icons": {
     "16": "images/icon/icon_16.png",
@@ -16,9 +16,6 @@
     "default_title": "CalGenPukiwiki",
     "default_popup": "popup.html"    
   },
-//   "background": {
-//     "scripts": ["js/jquery.js","js/background.js"]
-//   },
   "permissions": [
     "tabs",
     "clipboardWrite"
