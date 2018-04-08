@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "CalGenPukiwiki",
+  "name": "PukiwikiCalendarGenerator",
   "description": "This extension generates working calendar with pukiwiki format.",
   "version": "1.0",
   "icons": {
