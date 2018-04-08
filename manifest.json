@@ -13,7 +13,7 @@
         "19": "images/icon/icon_19.png",
         "38": "images/icon/icon_38.png"
     },
-    "default_title": "CalGenPukiwiki",
+    "default_title": "PukiwikiCalendarGenerator",
     "default_popup": "popup.html"    
   },
   "permissions": [
