@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="css/calendar.css"/>    
+  </head>
+  <body>
+    <b><font color="#ff0000"> 
+        ID : 0 には「休み」、ID : 1 には「デフォルトのオフィス」を必ず設定してください
+    </font></b> 
+    <br>
+    <!-- 現在のリストを表示 -->
+    <div id="place_list"></div>
+    <br>
+    <!-- 新しい場所の追加 -->
+    <table border="1">
+        <tr>
+            <td>場所 : </td>
+            <td><input type="text" id="add_name" size="20" maxlength="20"></td>                
+            <td>色 : </td>
+            <td><select id="add_color">
+                <option value="black">黒</option>
+                <option value="red">赤</option>
+                <option value="green">緑</option>
+                <option value="blue">青</option>
+                <option value="yellow">黄</option>                
+            </select></td>
+            <td><input id="add" type="button" value="追加"></td>
+        </tr>
+    </table>
+    <br>
+    <!-- 場所の削除 -->
+    <table border="1"><tr>
+        <td>ID : </td>
+        <td><input type="text" id="del_id" size="10" maxlength="5"></td>
+        <td><input id="del" type="button" value="削除"></td>
+    </tr></table>
+    <script src="js/options.js"></script>    
+  </body>
+</html>

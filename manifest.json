@@ -16,8 +16,9 @@
     "default_title": "PukiwikiCalendarGenerator",
     "default_popup": "popup.html"    
   },
+  "options_page": "options.html",
   "permissions": [
-    "tabs",
-    "clipboardWrite"
+    "clipboardWrite",
+    "storage"
   ]  
 }

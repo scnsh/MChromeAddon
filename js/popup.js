@@ -17,20 +17,27 @@ $(function(){
     var myTblLine;
     var myTable;
 
-    //JSONファイルの読み込み
-    //リストは2個以上が必要、0:休日用デフォルト、1:平日用デフォルト
-    $.getJSON("js/list.json", function(data){
-        for(var i in data)
-        {
-            ids.push(data[i].id);
-            names.push(data[i].name);
-            colors.push(data[i].color);
-        }
+    var defaults = {
+        ids: [0, 1],
+        names: ["休み", "オフィスA"],
+        colors: ["black", "red"]
+    };
 
-        // JSONファイルを読み込んでから実行する、今月分のみ表示
-        setCalender(curYear, todayCurMonth);        
-    });
-    
+    //起動時に読み込まれる
+    $(document).ready( function(){
+        //ストレージから読み込む(defaultsの構造で読み込む、なければdefaultsの値がそのまま読まれる)
+        chrome.storage.local.get(defaults, function(items) {
+            for(i=0; i<items.ids.length; i++)
+            {
+                ids.push(parseInt(items.ids[i]));
+                names.push(items.names[i]);
+                colors.push(items.colors[i]);
+            }                            
+            // 今月分のみ表示
+            setCalender(curYear, todayCurMonth);            
+        });
+    });    
+
     //pukiwikiフォーマットの日付を出力する
     function getDayPrint(day)
     {
@@ -114,7 +121,7 @@ $(function(){
             myTable[i]=' ';	// セルを全て空にする
         }
         for(i=0; i<monthTbl[myMonth]; i++){
-            myTable[i+myWeek]=(i+1) + getPulldown(myTable, i, myWeek);	// 日付を埋め込む
+            myTable[i+myWeek]=(i+1) + '<br>' +getPulldown(myTable, i, myWeek);	// 日付を埋め込む
         }
     
         var source = '';
