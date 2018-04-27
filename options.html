@@ -2,40 +2,51 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <script src="jquery-3.3.1.min.js"></script>
-    <link rel="stylesheet" href="css/calendar.css"/>    
+    <script src="assets/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="/static/dist/semantic.min.css"/>
+    <link rel="stylesheet" href="assets/css/calendar.css"/>    
   </head>
   <body>
-    <b><font color="#ff0000"> 
+  <!-- ヘッダー -->
+    <h1 class="ui blue inverted header">
+      PukiwikiCalendarGenerator
+    </h1>
+
+    <div class="ui compact warning message">
+        <div class="header">
+            入力時の注意事項
+        </div> 
         ID : 0 には「休み」、ID : 1 には「デフォルトのオフィス」を必ず設定してください
-    </font></b> 
-    <br>
-    <!-- 現在のリストを表示 -->
-    <div id="place_list"></div>
-    <br>
-    <!-- 新しい場所の追加 -->
-    <table border="1">
-        <tr>
-            <td>場所 : </td>
-            <td><input type="text" id="add_name" size="20" maxlength="20"></td>                
-            <td>色 : </td>
-            <td><select id="add_color">
-                <option value="black">黒</option>
-                <option value="red">赤</option>
-                <option value="green">緑</option>
-                <option value="blue">青</option>
-                <option value="yellow">黄</option>                
-            </select></td>
-            <td><input id="add" type="button" value="追加"></td>
-        </tr>
-    </table>
-    <br>
-    <!-- 場所の削除 -->
-    <table border="1"><tr>
-        <td>ID : </td>
-        <td><input type="text" id="del_id" size="10" maxlength="5"></td>
-        <td><input id="del" type="button" value="削除"></td>
-    </tr></table>
-    <script src="js/options.js"></script>    
+    </div>     
+    <div class="ui center aligned basic segment">    
+        <br>
+        <!-- 現在のリストを表示 -->
+        <div id="place_list"></div>
+        <br>
+        <!-- 新しい場所の追加 -->
+        <table class="ui collapsing table">
+            <tr>
+                <td>場所 : </td>
+                <td><div class="ui input"><input type="text" id="add_name" size="20" maxlength="20" placeholder="オフィスA"></div></td>                
+                <td>色 : </td>
+                <td><select class="ui dropdown" id="add_color">
+                    <option value="black">黒</option>
+                    <option value="red">赤</option>
+                    <option value="green">緑</option>
+                    <option value="blue">青</option>
+                    <option value="yellow">黄</option>                
+                </select></td>
+                <td><button class="ui button" id='add'>追加</button></td>
+            </tr>
+        </table>
+        <br>
+        <!-- 場所の削除 -->
+        <table class="ui collapsing table"><tr>
+            <td>ID : </td>
+            <td><div class="ui input"><input type="text" id="del_id" size="10" maxlength="5" placeholder="-1"></div></td>
+            <td><button class="ui button" id='del'>削除</button></td>
+        </tr></table>
+        <script src="assets/js/options.js"></script>    
+    </div>
   </body>
 </html>
