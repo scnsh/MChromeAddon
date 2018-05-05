@@ -6,12 +6,26 @@
     <link rel="stylesheet" href="/static/dist/semantic.min.css"/>    
 </head>
 <body>
-    <script src="assets/jquery-3.3.1.min.js"></script>
-    <div id="calendar"></div>
-    <br>
-    <button id="generate">Generate</button>
-    <br>
-    <textarea id="text" rows="10" cols="200">ここにpukiwikiフォーマットが出力される</textarea>
-    <script src="assets/js/popup.js"></script>
+    <div class="column">
+        <script src="assets/js/jquery-3.3.1.min.js"></script>
+        <div id="calendar"></div>
+    </div>
+    <div class="ui container"> 
+        <div class="row">
+            <div class="column">
+                <a class="ui button" id="generate">Generate</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <div class="ui form">
+                    <div class="field">
+                        <textarea id="text" rows="10" cols="150">ここにpukiwikiフォーマットが出力される</textarea>
+                    </div>                    
+                </div>
+            </div>
+        </div>                
+        <script src="assets/js/popup.js"></script>        
+    </div>
 </body>
 </html>

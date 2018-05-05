@@ -114,7 +114,7 @@ $(function(){
         ((myYear % 4)===0 && (myYear % 100) !==0) || (myYear % 400)===0 ? monthTbl[1] = 29: 28;	// うるう年だったら2月を29日とする
         var myMonth = myDate.getMonth();	// 月を取得(0月～11月)
         myDate.setDate(1);	// 日付を'1日'に変えて、
-        myWeek = myDate.getDay() == 0 ? 6 : myData.getDay() -1;	// '１日'の曜日を取得(0:月 -> 6:日)
+        myWeek = myDate.getDay() == 0 ? 6 : myDate.getDay() -1;	// '１日'の曜日を取得(0:月 -> 6:日)
         myTblLine = (myWeek < 0 && monthTbl[myMonth] > 29) ? 6 : Math.ceil((myWeek+monthTbl[myMonth])/7);	// カレンダーの行数, 日曜から始まり30日以上ある月のみ6行
         myTable = new Array(7*myTblLine);	// 表のセル数を用意
         for(var i=0; i<7*myTblLine; i++){
@@ -129,6 +129,8 @@ $(function(){
         var tdC = '</td>';
         var tr = '<tr>';
         var trC = '</tr>';
+        var th = '<th>'
+        var thC = '</th>'
     
         for(i=0; i<myTblLine; i++){	// 表の「行」のループ
             source += tr;
@@ -149,18 +151,18 @@ $(function(){
         var week = '';
         for(var k=0; k<7; k++){	// 曜日
             if(k === 5){
-                week += '<td class="sat">' + weekTbl[k] + tdC;
+                week += '<th class="sat">' + weekTbl[k] + thC;
             }else if(k === 6){
-                week += '<td class="sun">' + weekTbl[k] + tdC;
+                week += '<th class="sun">' + weekTbl[k] + thC;
             }else{
-                week += td + weekTbl[k] + tdC;
+                week += th + weekTbl[k] + thC;
             }
         }
         var weekTr = tr + week + trC;
-        var tableSource = '<table>' +
-            '<tr><td colspan="7">' +
+        var tableSource = '<table><thead>' +
+            '<tr><th colspan="7">' +
             myYear + '年' + (myMonth+1) + '月' +
-            '</td></tr>' + weekTr + source + '</table>';
+            '</th></tr>'+ weekTr + '</thead><tbody>' + source + '</tbody></table>';
         
         $calendar.append(tableSource);	// 表の作成開始
     }

@@ -11,15 +11,16 @@
 	margin: 10px 10px 0 0;
 }
 #calendar thead {
-	border-right: 1px solid #ccc;
-	border-left: 1px solid #ccc;
-	background: #04162e;
+	border-right: 0px solid #04162e;
+	border-left: 0px solid #04162e;
+	text-align: center;
+	background: #ccc;
 }
 #calendar thead th {
 	padding: 10px;
 	font-weight: bold;
 	vertical-align: top;
-	color: #fff;
+	color: #04162e;
 }
 #calendar tbody th {
 	width: 150px;

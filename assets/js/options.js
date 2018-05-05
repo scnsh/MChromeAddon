@@ -50,9 +50,9 @@ $(function(){
                 source += trC;
             }                
 
-            var tableSource = '<table border="1">' + 
-            '<tr><td>ID</td><td>場所名</td><td>色</td>' +
-            source + '</table>';
+            var tableSource = '<table class="ui collapsing table">' + 
+            '<thead><tr><th>ID</th><th>場所名</th><th>色</th></tr></thead><tbody>' +
+            source + '</tbody></table>';
 
             //リストを更新
             $place_list.empty();            
